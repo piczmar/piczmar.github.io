@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+<!--
+HELP:
+full screen = f , exit = ESC
+slide notes = s,
+black screen = b, 
+zoom  = Alt + click 
+slides overview (full screen only) = ESC
+-->
+	<head>
+		<meta charset="utf-8">
+
+		<title>Grails - Web Apps Development Productivity</title>
+
+		<meta name="description" content="A framework for easily creating web applications on Java Virtual Machine">
+		<meta name="author" content="Marcin Piczkowski">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/sky.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+
+		<style>
+		#scaled-frame { width:  100% ; height: 900px; border: 0px; }
+		#scaled-frame {
+			zoom: 0.71;
+			-moz-transform: scale(0.71);
+			-moz-transform-origin: 0 0;
+			-o-transform: scale(0.71);
+			-o-transform-origin: 0 0;
+			-webkit-transform: scale(0.71);
+			-webkit-transform-origin: 0 0;
+		}
+		@media screen and (-webkit-min-device-pixel-ratio:0) {
+			#scaled-frame  { zoom: 1;  }
+		}
+		</style>
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Grails</h1>
+					<h3>JVM Web Development Productivity</h3>
+					<p>
+						<small>Created by <a href="http://piczkowski.blogspot.com">Marcin Piczkowski</a> </small>
+					</p>
+				</section>
+
+				<section>
+					<h3>Agenda</h3>
+				<ul>
+					<li>What is Grails</li>
+					<li>Why productive?</li>
+					<li>But I have code in Java already :(</li>
+				</ul>
+				</section>
+
+					<section>
+						<h3>what is Grails?</h3>
+						<div style="text-align: left;">
+							<img style="margin:5px;" height="100px"  src="http://upload.wikimedia.org/wikipedia/commons/9/93/Grails_logo.png" align="left"/>
+							<p><strong>Grails</strong> is an open source web application framework that uses the Groovy programming language (which is in turn based on the Java platform).</p>
+						
+						</div>
+					</section>
+
+					<section>
+						<div style="text-align: left;">
+							<p><img style="margin:5px;" style="padding:1px;" height="100px" src="http://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Groovy-logo.svg/220px-Groovy-logo.svg.png" align="left"/></p>
+							<p><strong>Groovy</strong> is an object-oriented programming language for the Java platform. It is a dynamic language with features similar to those of Python, Ruby, Perl, and Smalltalk. </p>
+							<p>It can be used as a scripting language for the Java Platform, is dynamically compiled to Java Virtual Machine (JVM) bytecode, and interoperates with other Java code and libraries. </p>
+							<p><small>-- from <a href="http://en.wikipedia.org/wiki/Groovy_(programming_language)">Wikipedia</a></small>
+						</div>
+					</section>
+
+					<section>
+						<div style="text-align: left;">
+							<p>Dynamic.. but..</p>
+
+								<p><a href="http://docs.codehaus.org/display/GroovyJSR/GEP+10+-+Static+compilation">@CompileStatic</a>	
+							</p>
+
+							<pre><code data-trim contenteditable>
+@groovy.transform.CompileStatic
+int fib(int i) {
+    i < 2 ? 1 : fib(i - 2) + fib(i - 1)
+}
+						</code></pre>
+
+							</div>
+					</section>
+					<section>
+						<h3>Grails facts</h3>
+						<div style="font-size: 0.9em;">
+								<ul>
+									<li>2005 - <i>Groovy on Rails</i> started as an alternative od Ruby on Rails on JVM</li>
+									<li>2006 - renamed to <i>Grails</i></li>
+									<li>2007 - G2One Inc. founded by the Groovy and Grails project leads: Guillaume Laforge and Graeme Rocher, and by Alex Tkachman</li>
+									<li>2008 - G2One acquired by SpringSource, Grails 1.0</li>
+									<li>2009 - SpringSource acquired by VMware <p>(<a href="http://spring.io/projects">http://spring.io/projects</a>)</p></li>
+									<li>2011 - Grails 2.0</li>
+									<li>2012 - Grails 2.1, 2.2</li>
+									<li>2013 - Grails 2.3</li>
+									<li>2014 - Grails 2.4</li>
+									<li>current - Grails 2.4.2</li>
+								</ul>
+						</div>
+					</section>
+
+					<section>
+						<img src="http://people10.com/blog/wp-content/uploads/2013/01/Grails-Architecture1.jpg"/>
+						<p>
+							<small>-- from <a href="http://people10.com/blog/groovy-and-grails-application-development-2/">http://people10.com/blog/groovy-and-grails-application-development-2/</a> </small>
+						</p>
+					</section>
+					
+
+					<section>
+						<h3>Who uses Grails?</h3>
+						<p>
+							<small>-- from <a href="http://grails.org/websites">http://grails.org/websites</a> </small>
+						</p>
+
+						<iframe id="scaled-frame" src="http://grails.org/websites"></iframe>
+					</section>
+
+				<section>
+					<h3>what do I get?</h3>
+								<ul>
+						<li class="fragment">Less boilairplate (CoC)</li>
+						<li class="fragment">Web MVC</li>
+						<li class="fragment">GSP (Views)</li>
+						<li class="fragment">GORM (Data access)</li>
+						<li class="fragment">Database</li>
+						<li class="fragment">I18N</li>
+						<li class="fragment">Build</li>
+						<li class="fragment">Test</li>
+						<li class="fragment"><a href="http://grails.org/plugins/">Plugins</a></li>
+						<li class="fragment">Documentaiton and community
+
+							<ul>
+								<li><a href="http://grails.org/documentation">http://grails.org/documentation</a></li>
+								<li><a href="http://grails.org/tutorials">http://grails.org/tutorials</a></li>
+								<li><a href="http://grails.org/community">http://grails.org/community</a></li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3>what does my boss get?</h3>
+					<ul>
+						<li>Reduced Time to Market</li>
+						<li>Reduced Costs</li>
+						<li>Long term scalability</li>
+					</ul>
+
+					<aside class="notes">
+						<p>Reduced Cost due to less developer work.</p>
+						<p>Scalability is good because of: 
+							<ul>
+								<li>JVM, many enterprise tools available for Java</li>
+								<li>Grails is thin top layer on top of Spring which is considered scalable in J2EE world.</li>
+							</ul>
+
+						</aside>
+
+					</section>
+
+
+
+
+					<section>
+						<h2>Hands on</h2>
+
+					</section>
+
+
+					<section>
+						<h2>Console</h2>
+						<pre><code data-trim contenteditable>
+grails create-app appname
+
+grails -Dgrails.env=UAT run-app
+
+grails create-domain-class com.gprodjvm.Post
+
+grails generate-all
+
+grails
+
+grails test-app unit:
+
+grails test-app com.gprodjvm.*Controller
+
+
+						</code></pre>
+					</section>
+
+					<section>
+						<h2>Convention over configuration</h2>
+						<img src="img/app-tree.png"/>
+					</section>
+
+					<section>
+						<h2>GORM - mappings</h2>
+						<pre><code data-trim contenteditable>
+class User {
+							String login
+							Integer age
+							...
+							// SortedSet address
+							static hasMany = [address: Address]
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>GORM - constraints</h2>
+					<pre><code data-trim contenteditable>
+class User {
+						...
+						static constraints = {
+						login size: 5..15, blank: false, unique: true
+						password size: 5..15, blank: false
+						email email: true, blank: false
+						age min: 18
+					}
+}
+			</code></pre>
+			<p> dynamic persistent methods </p>
+			<pre><code data-trim contenteditable>
+def someMethod(){
+				Address a = ...
+
+				User u1 = new User(login: 'X', password: 'pass', age: 20)
+				u.addToAddresses(a)
+				u.save(flush: true, failOnError: true);
+				...
+
+				User u2 = User.findByLogin('X')
+				...
+				User u3 = User.createCriteria().get {
+				eq('login', 'X')
+				lock true /* obtains a pessimistic lock 
+				using an SQL select … for update. */
+			}
+}
+	</code></pre>
+</section>
+
+				<section>
+					<h2>Events and autotimestamping</h2>
+					<pre><code data-trim contenteditable>
+class User {
+						Date dateCreated 
+						Date lastUpdated
+
+						...
+						static mapping = {
+							autoTimestamp true
+						}
+
+					def beforeDelete() {
+						ActivityTrace.withNewSession {
+							new ActivityTrace(eventName: "User Deleted", data: name).save()
+						}
+					}
+}
+	</code></pre>
+	<p><small>--more <a href="http://grails.org/doc/latest/guide/GORM.html#eventsAutoTimestamping">http://grails.org/doc/latest/guide/GORM.html#eventsAutoTimestamping</a></small></p>
+	<aside class="notes">
+		<p>GORM supports the registration of events as methods that get fired when certain events occurs such as deletes, inserts and updates. The following is a list of supported events</p>
+		<ul>
+			<li>beforeInsert - Executed before an object is initially persisted to the database</li>
+			<li>beforeUpdate - Executed before an object is updated</li>
+			<li>beforeDelete - Executed before an object is deleted</li>
+			<li>beforeValidate - Executed before an object is validated</li>
+			<li>afterInsert - Executed after an object is persisted to the database</li>
+			<li>afterUpdate - Executed after an object has been updated</li>
+			<li>afterDelete - Executed after an object has been deleted</li>
+			<li>onLoad - Executed when an object is loaded from the database</li>
+		</ul>
+
+	</aside>
+</section>
+
+<section>
+	<h2>Bootstrap</h2>
+	<pre><code data-trim contenteditable>
+
+class BootStrap {
+
+		def init = { servletContext ->
+		
+			environments {
+				development {
+				....
+				}
+				production {
+				....
+				}
+		}
+		def destroy = {
+		}
+}
+</code></pre>
+	<pre><code data-trim contenteditable>
+grails run-app
+grails prod run-app
+</code></pre>
+</section>
+<section>
+	<h2>db console</h2>
+	<a href="http://localhost:8080/gjvmprod/dbconsole">http://localhost:8080/gjvmprod/dbconsole</a>
+</section>
+
+								<section>
+					<h2>Scaffolding</h2>
+					<pre><code data-trim contenteditable>
+
+class CommentController {
+
+    static scaffold = true
+
+}
+					</code></pre>
+
+					<pre><code data-trim contenteditable>
+grails install-templates
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Ajax response</h2>
+					<pre><code data-trim contenteditable>
+
+class CommentController {
+    def testAjax = {
+		render text: ["name": params.name] as JSON, contentType: 'application/json', status: 200
+	}
+
+}
+					</code></pre>
+				</section>
+
+
+				
+
+				<section>
+					<h2>Plugins</h2>
+					<p>grails-app/conf/BuildConfig.groovy</p>
+<pre><code data-trim contenteditable>
+repositories{
+…
+mavenRepo "http://repo.spring.io/milestone/"
+}
+…
+plugins {
+…
+    compile ':spring-security-core:2.0-RC2'
+…
+}
+					
+					</code></pre>
+					<p> Then run</p>
+					<pre><code>grails s2-quickstart my.package.security User Role</code></pre>
+				</section>
+
+<section>
+					<h2>Testing with Spock</h2>
+					<a href="http://code.google.com/p/spock/">http://code.google.com/p/spock/</a>
+					<pre><code data-trim contenteditable>
+@Unroll
+void "Should return '#size' item(s) with query '#query'"() {
+    given:
+        (1..20).each { i -> new BlogPost(title: "Post #${i}").save() }
+        params.query = query
+    and:
+        def result = controller.search()
+    expect:
+        result.size() == size
+    where:
+        search_query    | size 
+        null            | 0    
+        ""              | 0     
+        "17"            | 1   
+        "Post #1"       | 1  
+        "Post"          | 20
+}
+					</code></pre>
+				</section>
+					<section>
+						<h2>Extensibility</h2>
+						<h3>Spring MVC Controllers</h3>
+						<p style="text-align: left;">grails-app/conf/Config.groovy</p>
+						<pre><code data-trim contenteditable>
+							grails.spring.bean.packages = ['my.package.name']
+
+
+						</code></pre>
+					</section>
+					<section>	
+						<p style="text-align: left;">grails-app/conf/UrlMappings.groovy</p>
+						<pre><code data-trim contenteditable>
+class UrlMappings {
+
+	static mappings = {
+		...
+        '/system/mvc/test'(uri:"/mvc/test.dispatch")
+        ...
+	}
+}
+						</code></pre>
+
+						<p style="text-align: left;">src/java/my/package/MyController.java</p>
+						<pre><code data-trim contenteditable>
+..
+@Controller
+public class MvcController {
+    @RequestMapping(value = "/mvc/test.dispatch", 
+    	method = RequestMethod.GET)
+    public ModelAndView getText() {
+        return new ModelAndView("/system/mvc/test", 
+        	new ModelMap("text", " - from MVC controller"));
+    }
+    ...
+}
+
+
+					</section>
+
+					<section>
+					</code></pre>
+
+					<p style="text-align: left;">grails-app/views/system/mvc/test.gsp</p>
+						<pre><code data-trim contenteditable>
+&lt!DOCTYPE html&gt
+&lthtml&gt
+&lthead&gt
+    <meta name="layout" content="main">
+&lt/head&gt
+&ltbody>
+It works! message ${text}
+&lt/body&gt
+&lt/html&gt
+
+						</code></pre>
+					</section>
+
+
+				<section>
+						<h2>Extensibility</h2>
+						<h3>Spring Beans</h3>
+
+						<p style="text-align: left;">grails-app/conf/spring/resources.groovy</p>
+
+
+
+						<p style="text-align: left;">grails-app/conf/spring/resources.xml</p>
+												<pre><code data-trim contenteditable>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:ctx="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+...
+<ctx:property-placeholder 
+ 		location="classpath:my/package/config/application.properties"></ctx:property-placeholder>
+<bean id="clientDetails" 
+		class="my.package.services.MyService"></bean>
+...
+</beans>
+						</code></pre>
+				</section>
+				<section>
+						<p style="text-align: left;">src/java/my/package/services/MyService.java</p>
+						<pre><code data-trim contenteditable>
+class MyService {
+	...
+}
+
+						</code></pre>
+				
+						<p style="text-align: left;">grails-app/services/GrailsService.java</p>
+						<pre><code data-trim contenteditable>
+class GrailsService{
+	def myService
+}
+						</code></pre>
+
+				</section>
+				<!--section>
+						<h2>Interesting articles</h2>
+						<a href="http://grails.io/post/43484836985/road-to-grails-2-3-forked-execution">http://grails.io/post/43484836985/road-to-grails-2-3-forked-execution</a>
+				</section-->
+				<section>
+					<h1>THE END</h1>
+				</section>
+
+			</div>
+
+		</div>
+
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>

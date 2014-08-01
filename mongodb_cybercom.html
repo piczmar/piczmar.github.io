@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+<!--
+HELP:
+full screen = f , exit = ESC
+slide notes = s,
+black screen = b, 
+zoom  = Alt + click 
+slides overview (full screen only) = ESC
+-->
+	<head>
+		<meta charset="utf-8">
+
+		<title>MongoDB - Scaling, Replication, Sharding</title>
+
+		<meta name="description" content="introduction to MongoDB">
+		<meta name="author" content="Marcin Piczkowski">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/sky.css" id="theme">
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+
+		<style>
+		#scaled-frame { width:  100% ; height: 900px; border: 0px; }
+		#scaled-frame {
+			zoom: 0.71;
+			-moz-transform: scale(0.71);
+			-moz-transform-origin: 0 0;
+			-o-transform: scale(0.71);
+			-o-transform-origin: 0 0;
+			-webkit-transform: scale(0.71);
+			-webkit-transform-origin: 0 0;
+		}
+		@media screen and (-webkit-min-device-pixel-ratio:0) {
+			#scaled-frame  { zoom: 1;  }
+		}
+		</style>
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>MongoDB</h1>
+					<h3>Scaling, Replication, Sharding</h3>
+					<p>
+						<small>Created by <a href="http://piczkowski.blogspot.com">Marcin Piczkowski</a> </small>
+					</p>
+				</section>
+
+				<section>
+					<h3>Agenda</h3>
+				<ul style="list-style-type: none;">
+					<li>About FunLab project</li>
+					<li>What is MongoDB</li>
+					<li>Why No SQL ?</li>
+					<li>MongoDB basics</li>
+					<li>Replica Set</li>
+					<li>Sharding</li>
+				</ul>
+			</section>
+			<section>
+				<h2>About FunLab project</h2>
+				<ul style="list-style-type: none;">
+					<li>Creating monitoring application for mobile devices</li>
+					<li class="fragment">MongoDB database feeded from NodeJs server app</li>
+					<li class="fragment">Data analytics with <a href="http://hadoop.apache.org/">Hadoop</a></li>
+					<li class="fragment">Managing servers with <a href="http://www.vagrantup.com/">Vagrant</a> & <a href="http://www.getchef.com/chef/">Cheff</a>
+					<a href="https://supermarket.getchef.com/cookbooks/mongodb"> Cookbooks</a> 
+						<p>(a very nice <a href="http://zeroturnaround.com/rebellabs/pragmatic-devops-virtualization-provisioning-with-vagrant-chef/">tutorial)</a></p>
+					</li>
+					
+			</section>
+			<section>
+				<h2><a href="http://nodejs.org/">Nodejs</a></h2>
+				<p></p>
+				<a href="https://bitbucket.org/mpiczkowski/nodejs-rest-service/"> BitBicket repo</a>
+				<div id="div1" style="height: 500px;position:relative;">
+					<div id="div2" style="max-height:100%;overflow:auto;">
+						<div id="div3" style="font-size: 14px;">
+							<script src="https://gist.github.com/piczmar/81ddb5b809b8a66e5b8a.js"></script>
+						</div>
+					</div>
+				</div>
+
+			</section>
+			<section>
+				<h3>Architecture</h3>
+				<div style="text-align: center;">
+					
+					<img style="margin:5px; width: 400px"  src="" align="center"/>
+					
+				</div>
+			</section>
+
+			<section>
+				<h3>what is Mongo DB?</h3>
+				<div style="text-align: center;">
+					<p><strong>Mongo DB</strong> is cross-platform document-oriented database, classified as NoSQL</p>
+					<img style="margin:5px; width: 400px"  src="https://www.mongodb.com/sites/mongodb.com/files/media/mongodb_illustration_enterprise_transparent.gif" align="center"/>
+					<p><small>-- from <a href="hhttp://www.mongodb.com/mongodb-overview">mongodb.com</a></small></p>
+
+
+				</div>
+			</section>
+
+			<section>
+				<div style="text-align: left;">
+					<h3>what is Mongo DB?</h3>
+					<p><img style="margin:5px;" style="padding:1px;" height="100px" src="img/monogdb_cybercom/mongo-logo.png" align="left"/></p>
+					<ul>
+						<li>open source</li>
+						<li class="fragment">data as documents - BSON (Binary JSON)</li>
+						<li class="fragment">dynamic schema</li>
+						<li class="fragment">reach query model</li>
+						<li class="fragment">indexing</li>
+						<li class="fragment">transactional at document level</li>
+						<li class="fragment">horizontal scaling (sharding)</li>
+						<li class="fragment">replication</li>
+						<li class="fragment">in-memory performance (no need for a separate caching layer)</li>
+						<!-- Reading data from memory is measured in nanoseconds, whereas reading data from spinning disk is measured in milliseconds-->
+					</ul>
+				</div>
+			</section>
+
+			<section>
+				<h3>Who uses MongoDB?</h3>
+				<p>
+					<small>-- from <a href="http://www.mongodb.com/who-uses-mongodb">http://www.mongodb.com/who-uses-mongodb</a> </small>
+				</p>
+
+				<iframe id="scaled-frame" src="http://www.mongodb.com/who-uses-mongodb"></iframe>
+			</section>
+
+			<section>
+				<h3>Scale</h3>
+				<ul>
+					<li>> 100 organizations, clusters > 100 nodes</li>
+					<li>100 000 OPS</li><!-- operations per second -->
+					<li>~150 clusters, > 1 billion docs</li>
+				</ul>
+			</section>
+
+			<section>
+				<h3>Language support</h3>
+				<p><a href="http://docs.mongodb.org/ecosystem/drivers/">http://docs.mongodb.org/ecosystem/drivers/</a></p>
+				<ul> 
+					<li>C</li>
+					<li>C++</li>
+					<li>C#</li>
+					<li>GO!</li>
+					<li>...</li>
+				</ul>
+
+				<ul>
+					<li class="fragment">Less boilairplate (CoC)</li>
+					<li class="fragment">Web MVC</li>
+					<li class="fragment">GSP (Views)</li>
+					<li class="fragment">GORM (Data access)</li>
+					<li class="fragment">Database</li>
+					<li class="fragment">I18N</li>
+					<li class="fragment">Build</li>
+					<li class="fragment">Test</li>
+					<li class="fragment"><a href="http://grails.org/plugins/">Plugins</a></li>
+					<li class="fragment">Documentaiton and community
+
+						<ul>
+							<li><a href="http://grails.org/documentation">http://grails.org/documentation</a></li>
+							<li><a href="http://grails.org/tutorials">http://grails.org/tutorials</a></li>
+							<li><a href="http://grails.org/community">http://grails.org/community</a></li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+
+				<section>
+					<h3>MongoDL vs. RDBMS</h3>
+
+<table>					
+<thead valign="bottom">
+<tr><th>SQL Terms/Concepts</th>
+<th >MongoDB Terms/Concepts</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>database</td><td>database</td></tr>
+<tr><td>table</td><td>collection</td></tr>
+<tr class="row-even"><td>row</td>
+<td><a class="reference internal" href="../glossary/#term-document"><em class="xref std std-term">document</em></a> or <a class="reference internal" href="../glossary/#term-bson"><em class="xref std std-term">BSON</em></a> document</td>
+</tr>
+<tr class="row-odd"><td>column</td>
+<td><a class="reference internal" href="../glossary/#term-field"><em class="xref std std-term">field</em></a></td>
+</tr>
+<tr class="row-even"><td>index</td>
+<td><a class="reference internal" href="../glossary/#term-index"><em class="xref std std-term">index</em></a></td>
+</tr>
+<tr class="row-odd"><td>table joins</td>
+<td>embedded documents and linking</td>
+</tr>
+<tr class="row-even"><td><p class="first">primary key</p>
+<p class="last">Specify any unique column or column combination as primary
+key.</p>
+</td>
+<td><p class="first"><a class="reference internal" href="../glossary/#term-primary-key"><em class="xref std std-term">primary key</em></a></p>
+<p class="last">In MongoDB, the primary key is automatically set to the
+<a class="reference internal" href="../glossary/#term-id"><em class="xref std std-term">_id</em></a> field.</p>
+</td>
+</tr>
+<tr class="row-odd"><td>aggregation (e.g. group by)</td>
+<td><p class="first">aggregation pipeline</p>
+<p class="last">See the <a class="reference internal" href="../sql-aggregation-comparison/"><em>SQL to Aggregation Mapping Chart</em></a>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>
+							<small>-- from <a href="http://docs.mongodb.org/manual/reference/sql-comparison/">http://docs.mongodb.org/manual/reference/sql-comparison/</a> </small>
+						</p>
+
+					<aside class="notes">
+						<p>Reduced Cost due to less developer work.</p>
+						<p>Scalability is good because of: 
+							<ul>
+								<li>JVM, many enterprise tools available for Java</li>
+								<li>Grails is thin top layer on top of Spring which is considered scalable in J2EE world.</li>
+							</ul>
+
+						</aside>
+
+					</section>
+
+					<section>
+						<h2>RDBMS vs. Schema-less model</h2>
+						<div class="row">
+							<div class="col-md-6">
+								<p>RDBMS model</p>
+								<img src="img/monogdb_cybercom/rdbms-model.png"/>
+							</div>
+							<div class="col-md-6">
+								<p>Schema-less model</p>
+								<img src="img/monogdb_cybercom/mongo-model.png"/>
+							</div>
+						</div>
+						
+						
+					</section>
+
+					
+
+					<section>
+						<h2>Hands on</h2>
+						<h3>Basic Features</h3>
+							<pre><code data-trim contenteditable>
+MongoLab instance (500MB free): 
+https://mongolab.com/databases/demo
+
+To connect using the shell:
+mongo ds061208.mongolab.com:61208/demo -u admin -p admin
+To connect using a driver via the standard URI (what's this?):
+  mongodb://admin:admin@ds061208.mongolab.com:61208/demo
+
+show dbs
+use demo
+db.things.find()
+db.things.insert({name: "something", amount: 4})
+for(var i=1; i<10; i++) {db.things.insert({name : "somename"+i, amount: i});}
+db.things.find({name: "somename3"}).pretty()
+// insert with the same _id
+db.things.insert({_id : ObjectId(..), name: "other"})
+
+j = db.things.findOne()
+j
+j.name="A new name"
+ db.things.find({"_id" : ObjectId("53c7b0beb003089e9faf3732")})
+ db.things.save(j)
+ db.things.find({"_id" : ObjectId("53c7b0beb003089e9faf3732")})
+ db.things.findOne({},{name: 1, _id: 1})
+
+// operators: $gt, $gte, $lt, $in...
+db.things.find({age: {$gt: 5}})
+// querying inside arrays
+db.people.insert({name: "adam", f: ["tyskie", "zubr"]})
+db.people.find({f: {$in: ["tyskie", "warka"]}})
+db.people.find({f: {$all: ["tyskie", "warka"]}})
+//  update
+db.people.update({name : "adam"}, {age: 23})
+db.people.find()
+db.people.update({name: "adam"}, {$push :{f: "zywiec"}})
+db.people.update({name: "adam"}, {$pull :{f: "zubr"}})
+db.people.update({name: "adam"}, {$pop :{f: -1}})
+db.people.update({name: "adam"}, {$pushAll :{f: ["warka", "guiness"]}})
+db.people.update({name: "adam"}, {$popAll :{f: ["warka", "zywiec"]}})
+// upsert - update or insert if not exists
+db.people.update({name: "arnold"}, {$set : {age: 50}}, {upsert: true})
+db.people.find()
+db.people.update({name: "arnold"}, {$set : {age: 51}}, {upsert: true})
+db.people.find()
+// batch update - in mongo update works only for single dosument, to update many use option 'multi'
+db.people.update({}, {$set: {title: 'Dr'}}, {multi: 1})
+db.people.find()
+// delete
+db.people.remove({name: 'arnold'})
+db.people.remove() -- removes items one by one from colleciton
+db.people.drop() -- drops whole collection also indexes
+
+db.runCommand({getLastError: 1})
+
+// indexes
+for (var i=0 ; i<10000000; i++){db.items.insert({_id: i, name: "name" + i})}
+db.items.find({name: "name1000000"}).explain()
+db.items.ensureIndex({name: 1})
+db.items.find({name: "name1000000"}).explain()
+
+//prifiling (0, 1, 2)
+mongod --profile 1 // logs slow queries in db.system.profile
+1. mongo shell CRUD, grouping
+-- geospatial
+-- monitoring MMS (https://mms.mongodb.com/setup/monitoring)
+2. connecting nodejs client
+3. failover demonstration
+4. delayed slave
+
+
+
+						</code></pre>
+					</section>
+
+
+					<section>
+						<h2>Replication</h2>
+						<p>Replication gives redundancy and high data availability</p>
+						
+						<img src="img/monogdb_cybercom/mongo-replication.png"/>
+					</section>
+					<section>
+						<h2>Replication</h2>
+						<p>Replica set nodes:</p>
+						<ul>
+							<li>Regular</li>
+							<li>Arbiter (voting, has no data)</li>
+							<li>Delayed/Regular (P=0)</li>
+							<li>Hidden (analytics, P=0)</li><!-- priority 0 = cannot become primary but participtes in elections-->
+						</ul>
+						<p><a href="https://www.youtube.com/watch?feature=player_embedded&v=Oqf_Eza-s1M">Consistency of MongoDB replica</a>
+						</p>
+						<img src="img/monogdb_cybercom/mongo-replication.png"/>
+					</section>
+
+					<section>
+						<h2>Hands on</h2>
+						<h3>Replica Set</h3>
+						<pre><code data-trim contenteditable>
+
+.. todo ..
+mkdir /data/rs1 /data/rs2 /data/rs3
+mongod --replSet rs1 --logpath "1.log" --dbpath /data/rs1 --port 27017 --fork
+mongod --replSet rs1 --logpath "2.log" --dbpath /data/rs2 --port 27018 --fork
+mongod --replSet rs1 --logpath "3.log" --dbpath /data/rs3 --port 27019 --fork
+						
+// one node delayed 5 seconds
+
+init_replica.js
+
+config = {
+	_id: "rs1", members: [
+		{_id: 0, host: "127.0.0.1:27017", priority: 0, slaveDelay: 5},
+		{_id: 1, host: "127.0.0.1:27018"},
+		{_id: 2, host: "127.0.0.1:27019"}
+	]
+};
+rs.initiate(config)
+rs.status()
+
+you have to initialize from the host that can become primary so:
+
+mongo --port 27018 < init_replica.js
+
+connect and check:
+rs.status()
+rs.isMaster()
+
+rs.slaveOk() - if you want to query the secondary node
+
+cfg = rs.conf()
+cfg.members[0].slaveDelay = 3600
+rs.reconfig(cfg)
+
+db.people.insert({name: "test2"}) -- check if it's on delayed node
+
+-- kill master and see what happens
+use admin
+db.shutdownServer()
+
+https://www.youtube.com/watch?feature=player_embedded&v=lx0Kj4n4EWM
+use local
+db.oplog.find().pretty() -- see the differences in oplog on delayed node and other
+
+						</code></pre>
+					</section>
+	<section>
+						<h2>write concern</h2>
+						<p>Customizable write concern, can acknowledge all, minority or none node write success</p>
+						<img src="img/monogdb_cybercom/mongo-write_concern.png"/>
+						<!--
+w - write concern
+w:1 - send to primary and return success to user
+w:0 - send response to driver no matter if success
+w:2 - send response to driver when primary and secondary returns success
+w: 'j' - send response to driver when data is written in journal (we are save the data is not only in memory but on disk and won't disappear)
+j - journaling, operation not commited until it's journalled: j= 1
+wtimout
+failover rollback - https://www.youtube.com/watch?feature=player_embedded&v=IW1oW_Adlt0
+
+example: 
+kill delayed node and check w:2
+bring back delayed node and see that writes are acknowledged
+
+					-->
+					</section>
+
+					<section>
+						<h2>read preference</h2>
+						<p>Read goes to Primary by default, but can be configured to:
+
+<ul>
+<li>primary</li>
+<li>secondary</li>
+<li>primary prefered</li>
+<li>secondary preferec</li>
+<li>nearest</li>
+</ul>
+						 go only to secondary or both primary and secondary, or nearest node</p>
+						<img src="img/monogdb_cybercom/mongo-write_concern.png"/>
+						
+					</section>
+
+					<section>
+						<h2>Sharding</h2>
+						<p>Splitting large collection of data across multiple servers - scaling horizontaly</p>
+						<img src="img/monogdb_cybercom/mongo-shard.png"/>
+						<p>Each shard is typicaly a replica set</p>
+						<p>Router = mongos</p>
+					</section>
+					<section>
+						<h2>Hands on</h2>
+						<h3>Shard cluster</h3>
+						<pre><code data-trim contenteditable>
+
+https://www.youtube.com/watch?feature=player_embedded&v=aaYc2W4keF4
+.. todo ..
+
+write: insert must include shard_key for mongos to know which shard to put data in
+
+read: if query does not include shard_key then it's executed on each shard
+
+mkdir -p /data/config/ /data/shard0/rs0 /data/shard0/rs1 /data/shard0/rs2 /data/shard1/rs0 /data/shard1/rs1 /data/shard1/rs2
+
+mongod --replSet s0 --logpath "s0-1.log" --dbpath /data/shard0/rs1 --port 37017 --fork --shardsvr
+mongod --replSet s0 --logpath "s0-2.log" --dbpath /data/shard0/rs2 --port 37018 --fork --shardsvr
+mongod --replSet s0 --logpath "s0-3.log" --dbpath /data/shard0/rs3 --port 37019 --fork --shardsvr
+						
+mongo --port 37017 << 'EOF'
+config = {
+	_id: "s0", members: [
+		{_id: 0, host: "127.0.0.1:37017"},
+		{_id: 1, host: "127.0.0.1:37018"},
+		{_id: 2, host: "127.0.0.1:37019"}
+	]
+};
+rs.initiate(config)
+EOF
+
+
+sh.help()
+sh.status()
+db.grades.stats()
+db.grades.find({student_id : 1}).explain() - gets to 1 shard
+db.grades.find().explain() - gets to all shards
+
+Implications os sharding: 
+- every document has to include shard_key
+- shard_key is immutable
+- multi-key indexes must start with shard_key
+- no shard key means scatter-gather operation (executed on all nodes)
+- no unique key unless part of shard key (caus eindexes are kept separately on each shard)
+
+						</code></pre>
+					</section>
+				
+				<section>
+					<h1>THE END</h1>
+				</section>
+
+			</div>
+
+		</div>
+
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
